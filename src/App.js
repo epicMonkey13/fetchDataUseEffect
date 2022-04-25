@@ -1,25 +1,32 @@
-import logo from './logo.svg';
 import './App.css';
+import { useState, useEffect } from 'react';
+
+function GitHubUser({login}) {
+  const [data, setData] = useState(null);
+  useEffect(() => {
+    fetch(`https://api.github.com/users/${login}`)
+    .then(res => res.json())
+    .then(setData)
+    .catch(console.error);
+  }, []);
+
+  if (data) {
+    return (
+    <div>
+      <h1>{data.login}</h1>
+      <img src={data.avatar_url} width={100} alt="visual representation of someone's personality or a random choice"/>
+      <h2>{data.location}</h2>
+    </div>
+    );
+  }
+  return null;
+}
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <GitHubUser login="moonhighway"/>
   );
+
 }
 
 export default App;
